@@ -37,3 +37,7 @@ Route::resource('refLevels', 'RefLevelController');
 Route::resource('refCategories', 'RefCategoriesController');
 
 Route::get('refs/{user_id}/{ref_category_id?}', 'RefCategoriesController@refs')->name('refs.user');
+
+Route::resource('tasks', 'TasksController');
+
+Route::resource('taskUsers', 'TaskUserController');

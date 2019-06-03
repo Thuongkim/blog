@@ -44,6 +44,7 @@ class RefCategoriesController extends AppBaseController
         if (!$user_id) {
             return ridirect(route('/login'));
         }
+
         if ($ref_category_id) {
             $refCategory = RefCategories::where('id', $ref_category_id)->first();
             RefCategories::where('id', $ref_category_id)->update([
@@ -51,15 +52,17 @@ class RefCategoriesController extends AppBaseController
                 'referral_visits' => $refCategory->refferral_visits+1,
             ]);
         }
+
+        if (Cookie::get('ref_user_id')) {
+        return response(view('auth.register'));
+        }
+        //Use cookies to track the visit
+        return response(view('auth.register'))
+                    ->cookie('ref_user_id', $user_id, 60*24*30*12)
+                    ->cookie('ref_category_id', $ref_category_id, 60*24*30*12);
     }
 
-    if (Cookie::get('ref_user_id')) {
-        return response(route('/register'));
-    }
-    //Use cookies to track the visit
-    return response(route('/register'))
-                ->cookie('ref_user_id', $user_id, 60*24*30*12)
-                ->cookie('ref_category_id', $ref_category_id, 60*24*30*12);
+    
     /**
      * Show the form for creating a new RefCategories.
      *
